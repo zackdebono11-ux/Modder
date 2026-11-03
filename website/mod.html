@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b100e">
+    <title>Mod details — Modder</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="mod.js" defer></script>
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="index.html">
+            <span class="brand-icon">M</span>
+            <span>modder<span class="brand-dot">.</span></span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="index.html#explore">Explore</a>
+            <a href="index.html#add-mod">Add a mod</a>
+        </nav>
+        <a class="nav-button" href="index.html">← All mods</a>
+    </header>
+
+    <main class="detail-page section">
+        <a class="back-link" href="index.html#explore">← Back to Explore</a>
+
+        <div id="detail-content" hidden>
+            <div class="detail-hero">
+                <img class="detail-image" id="detail-image"
+                    alt="Mod preview">
+            </div>
+
+            <div class="detail-layout">
+                <div class="detail-main">
+                    <span class="mod-category" id="detail-category"></span>
+                    <h1 class="detail-title" id="detail-title"></h1>
+                    <p class="detail-description" id="detail-description"></p>
+
+                    <h2 class="detail-heading">Screenshots & preview</h2>
+                    <div class="screenshot-grid" id="screenshot-grid"></div>
+
+                    <h2 class="detail-heading">About this mod</h2>
+                    <p class="detail-description" id="detail-about"></p>
+                </div>
+
+                <aside class="detail-sidebar">
+                    <span class="section-kicker">MOD INFORMATION</span>
+
+                    <div class="info-row">
+                        <span>Version</span>
+                        <strong id="detail-version"></strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Game compatibility</span>
+                        <strong id="detail-compatibility"></strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Category</span>
+                        <strong id="detail-info-category"></strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Listing status</span>
+                        <strong id="detail-status"></strong>
+                    </div>
+
+                    <p class="field-help" id="download-note">
+                        Downloads are not available for this listing.
+                    </p>
+
+                    <a class="button button-primary download-button"
+                       id="download-button" hidden
+                       target="_blank" rel="noopener noreferrer">
+                        Open download ↗
+                    </a>
+
+                    <p class="field-help">
+                        Check the source and scan files before installing.
+                        A listing's authorisation declaration is not a safety guarantee.
+                    </p>
+                </aside>
+            </div>
+        </div>
+
+        <div class="empty-state" id="not-found">
+            <div class="empty-icon">?</div>
+            <h2>Mod not found</h2>
+            <p>This listing may have been removed or the address may be incorrect.</p>
+            <a class="button button-primary" href="index.html#explore">
+                Browse mods
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-icon">M</span>
+            <span>modder<span class="brand-dot">.</span></span>
+        </a>
+        <p>Made for players who love to experiment.</p>
+        <span class="footer-version">MODDER v0.2</span>
+    </footer>
+</body>
+</html>

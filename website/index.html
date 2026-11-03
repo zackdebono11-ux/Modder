@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b100e">
+    <meta name="description" content="Discover Geometry Dash mods on Modder.">
+    <title>Modder — Geometry Dash Mods</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="index.html">
+            <span class="brand-icon">M</span>
+            <span>modder<span class="brand-dot">.</span></span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#explore">Explore</a>
+            <a href="#categories">Categories</a>
+            <a href="#add-mod">Add a mod</a>
+        </nav>
+
+        <a class="nav-button" href="#explore">Explore mods ↗</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="eyebrow">
+                    <span class="status-dot"></span>
+                    THE GEOMETRY DASH MOD HUB
+                </div>
+
+                <h1>Level up your<br><span>Geometry Dash.</span></h1>
+
+                <p class="hero-description">
+                    Discover community-made tools, customisations and
+                    enhancements for your favourite rhythm platformer.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="button button-primary" href="#explore">
+                        Explore mods →
+                    </a>
+                    <a class="button button-secondary" href="#add-mod">
+                        Add a mod +
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div>
+                        <strong id="mod-count">0</strong>
+                        <span>Mod listings</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div>
+                        <strong>02</strong>
+                        <span>Version</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div>
+                        <strong>∞</strong>
+                        <span>Possibilities</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="hero-cube"><div class="cube-inner"></div></div>
+                <div class="floating-square square-one"></div>
+                <div class="floating-square square-two"></div>
+                <div class="floating-square square-three"></div>
+                <span class="art-label">MODDER v0.2</span>
+            </div>
+        </section>
+
+        <section class="announcement">
+            <span class="announcement-icon">✦</span>
+            <p>
+                <strong>Modder v0.2 is here!</strong>
+                Explore detailed listings and previews, or create a listing
+                of your own.
+            </p>
+        </section>
+
+        <section class="section" id="explore">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">THE COLLECTION</span>
+                    <h2>Explore mods<span class="green-dot">.</span></h2>
+                    <p>Find something new for your next GD session.</p>
+                </div>
+
+                <div class="sort-wrapper">
+                    <label for="sort-select">Sort by</label>
+                    <select id="sort-select">
+                        <option value="featured">Featured</option>
+                        <option value="name">Name: A–Z</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+            </div>
+
+            <form class="search-box" id="search-form" role="search">
+                <span class="search-icon" aria-hidden="true">⌕</span>
+                <input id="search-input" type="search"
+                    placeholder="Search mods, tools, categories..."
+                    aria-label="Search mods" autocomplete="off">
+                <button type="submit">Search</button>
+            </form>
+
+            <div class="category-bar" id="categories"
+                 aria-label="Filter mods by category">
+                <button class="category-button active"
+                    data-category="All" aria-pressed="true">All mods</button>
+                <button class="category-button"
+                    data-category="Tools" aria-pressed="false">Tools</button>
+                <button class="category-button"
+                    data-category="Visuals" aria-pressed="false">Visuals</button>
+                <button class="category-button"
+                    data-category="Gameplay" aria-pressed="false">Gameplay</button>
+                <button class="category-button"
+                    data-category="Utilities" aria-pressed="false">Utilities</button>
+            </div>
+
+            <div class="results-line">
+                <span id="results-count">Loading mods...</span>
+                <span class="sample-label"><span></span> MOD LISTINGS</span>
+            </div>
+
+            <div class="mod-grid" id="mod-grid" aria-live="polite"></div>
+
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">⌕</div>
+                <h3>No mods found</h3>
+                <p>Try another search or choose a different category.</p>
+                <button class="button button-secondary" id="reset-button">
+                    Clear filters
+                </button>
+            </div>
+        </section>
+
+        <section class="section add-section" id="add-mod">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">GROW THE COLLECTION</span>
+                    <h2>Add a mod<span class="green-dot">.</span></h2>
+                    <p>Create a listing for a mod you own or are authorised to share.</p>
+                </div>
+            </div>
+
+            
+<form class="add-form" id="add-form">
+    <div class="form-grid">
+        <label>
+            Mod name *
+            <input name="name" required maxlength="60"
+                placeholder="e.g. My GD Toolkit">
+        </label>
+
+        <label>
+            Category *
+            <select name="category" required>
+                <option value="Tools">Tools</option>
+                <option value="Visuals">Visuals</option>
+                <option value="Gameplay">Gameplay</option>
+                <option value="Utilities">Utilities</option>
+            </select>
+        </label>
+
+        <label>
+            Version
+            <input name="version" maxlength="20"
+                placeholder="e.g. 1.0.0">
+        </label>
+
+        <label>
+            Compatible game version
+            <input name="compatibility" maxlength="50"
+                placeholder="e.g. 2.209">
+        </label>
+
+        <label>
+            Author name
+            <input name="author" maxlength="60"
+                placeholder="Your username">
+        </label>
+
+        <label class="full-width">
+            Description *
+            <textarea name="description" required maxlength="1000"
+                rows="4" placeholder="What does this mod do?"></textarea>
+        </label>
+
+        <label class="full-width">
+            Mod file * (.geode or .zip)
+            <input
+                type="file"
+                name="modFile"
+                accept=".geode,.zip"
+                required
+            >
+            <span class="field-help">
+                Maximum file size: 50 MB. Upload only files you own or have permission to share.
+            </span>
+        </label>
+
+        <label class="full-width">
+            Screenshots (optional)
+            <input
+                type="file"
+                name="screenshots"
+                accept=".png,.jpg,.jpeg,.webp"
+                multiple
+            >
+            <span class="field-help">
+                Up to 5 screenshots. Each screenshot must be 5 MB or smaller.
+            </span>
+        </label>
+    </div>
+
+    <label class="consent-row">
+        <input name="authorised" type="checkbox" required>
+        <span>
+            I own this content or have permission to share it, and
+            I have checked the information I submitted.
+        </span>
+    </label>
+
+    <p class="field-help">
+        New submissions are community listings and are not automatically verified.
+    </p>
+
+    <button class="button button-primary" type="submit">
+        Upload mod +
+    </button>
+
+    <p class="form-message" id="form-message" role="status"></p>
+</form>
+
+        </section>
+
+        <section class="about-section section" id="about">
+            <div class="about-icon">M<span>.</span></div>
+            <div class="about-copy">
+                <span class="section-kicker">BUILT FOR THE COMMUNITY</span>
+                <h2>A hub for your next adventure.</h2>
+                <p>
+                    Modder is a community mod-discovery project.
+                    Always check the source, compatibility and safety of
+                    a download before installing it.
+                </p>
+            </div>
+            <a class="button button-secondary" href="#explore">Back to mods ↑</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <a class="brand footer-brand" href="index.html">
+            <span class="brand-icon">M</span>
+            <span>modder<span class="brand-dot">.</span></span>
+        </a>
+        <p>Made for players who love to experiment.</p>
+        <span class="footer-version">MODDER v0.2</span>
+    </footer>
+</body>
+</html>
