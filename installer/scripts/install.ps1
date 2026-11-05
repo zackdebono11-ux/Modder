@@ -95,8 +95,19 @@ if ($Mode -eq "Full") {
         New-Item -ItemType Directory -Force `
             -Path "$InstallRoot\bin" | Out-Null
 
-        Copy-Item "$InstallRoot\backend\modder.js" `
+        # Install the current CLI and .modder format module.
+        Copy-Item "$PackageRoot\bin\modder-cli.js" `
             "$InstallRoot\bin\modder-cli.js" -Force
+
+        Copy-Item "$PackageRoot\bin\modder-format.js" `
+            "$InstallRoot\bin\modder-format.js" -Force
+
+        # Ensure Full mode has the ZIP dependency too.
+        Copy-Item "$PackageRoot\backend\package.json" `
+            "$InstallRoot\backend\package.json" -Force
+
+        Copy-Item "$PackageRoot\backend\package-lock.json" `
+            "$InstallRoot\backend\package-lock.json" -Force
 
         Copy-Item "$PackageRoot\bin\modder.js" `
             "$InstallRoot\bin\modder.js" -Force
@@ -119,6 +130,7 @@ else {
 
     Copy-Item "$PackageRoot\bin\modder.js" "$InstallRoot\bin\modder.js" -Force
     Copy-Item "$PackageRoot\bin\modder-cli.js" "$InstallRoot\bin\modder-cli.js" -Force
+    Copy-Item "$PackageRoot\bin\modder-format.js" "$InstallRoot\bin\modder-format.js" -Force
 
     Copy-Item "$PackageRoot\backend\server.js" "$InstallRoot\backend\server.js" -Force
     Copy-Item "$PackageRoot\backend\package.json" "$InstallRoot\backend\package.json" -Force

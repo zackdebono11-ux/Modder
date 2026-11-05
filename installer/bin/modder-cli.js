@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline/promises");
+const modderFormat = require("./modder-format");
 
 const API_URL = "http://localhost:3000";
 const VERSION = "0.3.0";
@@ -10,7 +11,7 @@ const VERSION = "0.3.0";
 
 function showHelp() {
     console.log(`
-🌴 MODDER CLI v0.3.0
+ðŸŒ´ MODDER CLI v0.3.0
 
 Manage your Modder community directly from PowerShell.
 
@@ -22,6 +23,12 @@ COMMANDS:
   list                List all community mods
   search <name>       Search for mods
   info <id>           Display mod information
+  create <name>        Create a Modder project
+  open <file>          Extract a Modder project
+  build <folder>       Package a compiled Geode mod
+  pack <folder>        Archive a Modder project
+  validate <file>      Validate a .modder archive
+  install <file>       Add a package to your local library
   --help, -h          Show this help menu
   --version, -v       Show the CLI version
     download <id>       Download an authorised mod
@@ -38,7 +45,7 @@ modder download 123
 API:
   ${API_URL}
 
-🌴 Made for the Geometry Dash community.
+ðŸŒ´ Made for the Geometry Dash community.
 `);
 }
 
@@ -52,13 +59,13 @@ async function uploadMod(filePath) {
     const fullPath = path.resolve(filePath);
 
     if (!fs.existsSync(fullPath)) {
-        console.error("❌ File not found:", fullPath);
+        console.error("âŒ File not found:", fullPath);
         process.exitCode = 1;
         return;
     }
 
     if (!fs.statSync(fullPath).isFile()) {
-        console.error("❌ The supplied path is not a file.");
+        console.error("âŒ The supplied path is not a file.");
         process.exitCode = 1;
         return;
     }
@@ -66,12 +73,12 @@ async function uploadMod(filePath) {
     const extension = path.extname(fullPath).toLowerCase();
 
     if (![".geode", ".zip"].includes(extension)) {
-        console.error("❌ Only .geode and .zip files are supported.");
+        console.error("âŒ Only .geode and .zip files are supported.");
         process.exitCode = 1;
         return;
     }
 
-    console.log("\n🌴 MODDER UPLOAD");
+    console.log("\nðŸŒ´ MODDER UPLOAD");
     console.log("------------------------------");
     console.log("File:", path.basename(fullPath));
 
@@ -89,7 +96,7 @@ async function uploadMod(filePath) {
         const description = await ask(rl, "Description: ");
 
         if (!name || !category || !description) {
-            console.error("\n❌ Name, category and description are required.");
+            console.error("\nâŒ Name, category and description are required.");
             process.exitCode = 1;
             return;
         }
@@ -130,14 +137,14 @@ async function uploadMod(filePath) {
             throw new Error(result.error || `HTTP ${response.status}`);
         }
 
-        console.log("\n✅ Mod uploaded successfully!");
+        console.log("\nâœ… Mod uploaded successfully!");
         console.log("Name:", result.mod.name);
         console.log("ID:", result.mod.id);
         console.log("Status: Community listing");
-        console.log("\n🌴 Thanks for contributing to Modder!");
+        console.log("\nðŸŒ´ Thanks for contributing to Modder!");
 
     } catch (error) {
-        console.error("\n❌ Upload failed:", error.message);
+        console.error("\nâŒ Upload failed:", error.message);
         process.exitCode = 1;
     } finally {
         rl.close();
@@ -154,7 +161,7 @@ async function listMods() {
 
         const data = await response.json();
 
-        console.log("\n🌴 MODDER COMMUNITY MODS");
+        console.log("\nðŸŒ´ MODDER COMMUNITY MODS");
         console.log("------------------------------");
 
         if (!data.mods.length) {
@@ -175,14 +182,14 @@ ${mod.name}
         console.log(`Total: ${data.mods.length} mods`);
 
     } catch (error) {
-        console.error("\n❌ Could not load mods:", error.message);
+        console.error("\nâŒ Could not load mods:", error.message);
         process.exitCode = 1;
     }
 }
 
 async function searchMods(searchTerm) {
     if (!searchTerm) {
-        console.error('❌ Usage: modder search "mod name"');
+        console.error('âŒ Usage: modder search "mod name"');
         process.exitCode = 1;
         return;
     }
@@ -207,7 +214,7 @@ async function searchMods(searchTerm) {
             return searchable.includes(searchTerm.toLowerCase());
         });
 
-        console.log(`\n🔎 SEARCH RESULTS: "${searchTerm}"`);
+        console.log(`\nðŸ”Ž SEARCH RESULTS: "${searchTerm}"`);
         console.log("------------------------------");
 
         if (!matches.length) {
@@ -227,14 +234,14 @@ ${mod.name}
         console.log(`Found ${matches.length} matching mods.`);
 
     } catch (error) {
-        console.error("\n❌ Search failed:", error.message);
+        console.error("\nâŒ Search failed:", error.message);
         process.exitCode = 1;
     }
 }
 
 async function showModInfo(id) {
     if (!id) {
-        console.error("❌ Usage: modder info <id>");
+        console.error("âŒ Usage: modder info <id>");
         process.exitCode = 1;
         return;
     }
@@ -245,7 +252,7 @@ async function showModInfo(id) {
         );
 
         if (response.status === 404) {
-            console.error("❌ Mod not found.");
+            console.error("âŒ Mod not found.");
             process.exitCode = 1;
             return;
         }
@@ -257,7 +264,7 @@ async function showModInfo(id) {
         const mod = await response.json();
 
         console.log(`
-🌴 MOD INFORMATION
+ðŸŒ´ MOD INFORMATION
 ------------------------------
 
 Name: ${mod.name}
@@ -278,20 +285,20 @@ Featured: ${mod.featured ? "Yes" : "No"}
 ------------------------------
 `);
     } catch (error) {
-        console.error("\n❌ Could not retrieve mod:", error.message);
+        console.error("\nâŒ Could not retrieve mod:", error.message);
         process.exitCode = 1;
     }
 }
 
 async function downloadMod(id) {
     if (!id) {
-        console.error("❌ Usage: modder download <id>");
+        console.error("âŒ Usage: modder download <id>");
         process.exitCode = 1;
         return;
     }
 
     try {
-        console.log("\n🌴 MODDER DOWNLOAD");
+        console.log("\nðŸŒ´ MODDER DOWNLOAD");
         console.log("------------------------------");
 
         // Retrieve mod information.
@@ -364,11 +371,11 @@ const response = await fetch(downloadUrl);
 
         fs.writeFileSync(destination, buffer);
 
-        console.log("\n✅ Download completed!");
+        console.log("\nâœ… Download completed!");
         console.log("Saved to:", destination);
-        console.log("\n🌴 Enjoy your mod!");
+        console.log("\nðŸŒ´ Enjoy your mod!");
     } catch (error) {
-        console.error("\n❌ Download failed:", error.message);
+        console.error("\nâŒ Download failed:", error.message);
         process.exitCode = 1;
     }
 }
@@ -388,6 +395,47 @@ async function main() {
         console.log(`Modder CLI v${VERSION}`);
         return;
 
+    }
+    const formatCommands = ["create", "open", "build", "pack", "validate", "install"];
+
+    if (formatCommands.includes(command)) {
+        try {
+            switch (command) {
+                case "create":
+                    if (!args[1]) throw new Error("Specify a project name.");
+                    modderFormat.createProject(args[1]);
+                    break;
+
+                case "open":
+                    if (!args[1]) throw new Error("Specify a .modder project file.");
+                    modderFormat.openProject(args[1]);
+                    break;
+
+                case "pack":
+                    if (!args[1]) throw new Error("Specify a project folder.");
+                    modderFormat.packProject(args[1], args[2]);
+                    break;
+                case "build":
+                    if (!args[1]) throw new Error("Specify a project folder.");
+                    modderFormat.buildPackage(args[1], args[2]);
+                    break;
+
+                case "validate":
+                    if (!args[1]) throw new Error("Specify a .modder file.");
+                    modderFormat.validateArchive(args[1]);
+                    break;
+
+                case "install":
+                    if (!args[1]) throw new Error("Specify a .modder package.");
+                    modderFormat.installPackage(args[1]);
+                    break;
+            }
+        } catch (error) {
+            console.error("\nModder:", error.message);
+            process.exitCode = 1;
+        }
+
+        return;
     }
     if (command === "download") {
     await downloadMod(args[1]);
@@ -411,7 +459,7 @@ if (command === "info") {
 
     if (command === "upload") {
         if (!args[1]) {
-            console.error("❌ Please specify a mod file.");
+            console.error("âŒ Please specify a mod file.");
             console.log("Example: modder upload example.geode");
             process.exitCode = 1;
             return;
@@ -433,7 +481,7 @@ if (command === "info") {
         return;
     }
 
-    console.error(`❌ Unknown command: ${command}`);
+    console.error(`âŒ Unknown command: ${command}`);
     console.log('Run "modder --help" to see available commands.');
     process.exitCode = 1;
 }
