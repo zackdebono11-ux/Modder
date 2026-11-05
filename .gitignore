@@ -1,0 +1,51 @@
+﻿# Node.js dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+build/
+dist/
+out/
+release/staging/
+
+# Geode / Android build outputs
+**/build-android64/
+**/cmake-build-*/
+.gradle/
+.cxx/
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Local caches
+.cache/
+.elixir_ls/
+
+# Elixir generated dependencies and builds
+**/deps/
+**/_build/
+
+# Local crash reports
+android/geode-crash.txt
+
+# Local user-uploaded content (do not redistribute)
+backend/uploads/
