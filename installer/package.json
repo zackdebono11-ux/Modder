@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@zackdebono11-ux/modder-installer",
   "version": "0.1.1",
   "description": "Installer for the Modder Geometry Dash mod platform",
@@ -23,10 +23,10 @@
   ],
   "license": "MIT",
   "repository": {
-  "type": "git",
-  "url": "https://github.com/zackdebono11-ux/Modder-Early-Access.git"
-},
-"publishConfig": {
-  "registry": "https://npm.pkg.github.com"
-}
+    "type": "git",
+    "url": "https://github.com/zackdebono11-ux/Modder.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
 }
