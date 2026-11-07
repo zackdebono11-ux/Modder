@@ -9,7 +9,7 @@ const {
     Unzip,
     UnzipInflate,
     UnzipPassThrough
-} = require("../backend/node_modules/fflate");
+} = require("fflate");
 
 const MAX_ARCHIVE_SIZE = 250 * 1024 * 1024;
 const MAX_TOTAL_SIZE = 500 * 1024 * 1024;

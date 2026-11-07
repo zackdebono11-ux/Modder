@@ -102,6 +102,9 @@ if ($Mode -eq "Full") {
         Copy-Item "$PackageRoot\bin\modder-format.js" `
             "$InstallRoot\bin\modder-format.js" -Force
 
+        Copy-Item "$PackageRoot\bin\modder-dependencies.js" `
+            "$InstallRoot\bin\modder-dependencies.js" -Force
+
         # Ensure Full mode has the ZIP dependency too.
         Copy-Item "$PackageRoot\backend\package.json" `
             "$InstallRoot\backend\package.json" -Force
@@ -131,6 +134,7 @@ else {
     Copy-Item "$PackageRoot\bin\modder.js" "$InstallRoot\bin\modder.js" -Force
     Copy-Item "$PackageRoot\bin\modder-cli.js" "$InstallRoot\bin\modder-cli.js" -Force
     Copy-Item "$PackageRoot\bin\modder-format.js" "$InstallRoot\bin\modder-format.js" -Force
+    Copy-Item "$PackageRoot\bin\modder-dependencies.js" "$InstallRoot\bin\modder-dependencies.js" -Force
 
     Copy-Item "$PackageRoot\backend\server.js" "$InstallRoot\backend\server.js" -Force
     Copy-Item "$PackageRoot\backend\package.json" "$InstallRoot\backend\package.json" -Force
@@ -156,6 +160,60 @@ finally {
     Pop-Location
 }
 
+# Check the root-level fflate dependency used by the CLI.
+Write-Host ""
+Write-Host "Checking Modder dependencies..." -ForegroundColor Cyan
+
+$FflatePackage = "$InstallRoot\node_modules\fflate\package.json"
+$FflateReady = $false
+
+if (Test-Path $FflatePackage) {
+    try {
+        $FflateData = Get-Content $FflatePackage -Raw | ConvertFrom-Json
+        $FflateVersion = [version]$FflateData.version
+
+        if ($FflateVersion -ge [version]"0.8.3" -and
+            $FflateVersion -lt [version]"0.9.0") {
+            $FflateReady = $true
+        }
+    }
+    catch {
+        $FflateReady = $false
+    }
+}
+
+if ($FflateReady) {
+    Write-Host "fflate detected (v$($FflateData.version))." -ForegroundColor Green
+}
+else {
+    Write-Host "fflate is needed for Modder archive features." -ForegroundColor Yellow
+    $Answer = Read-Host "Install fflate now? (y/n)"
+
+    if ($Answer -match '^(y|yes)$') {
+        npm.cmd install --prefix "$InstallRoot" --no-save --package-lock=false "fflate@^0.8.3"
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "fflate installation failed."
+        }
+
+        if (-not (Test-Path $FflatePackage)) {
+            throw "fflate installation could not be verified."
+        }
+
+        $FflateData = Get-Content $FflatePackage -Raw | ConvertFrom-Json
+        $FflateVersion = [version]$FflateData.version
+
+        if ($FflateVersion -lt [version]"0.8.3" -or
+            $FflateVersion -ge [version]"0.9.0") {
+            throw "The installed fflate version is incompatible."
+        }
+
+        Write-Host "fflate installed successfully (v$($FflateData.version))." -ForegroundColor Green
+    }
+    else {
+        Write-Warning "fflate was not installed. Modder archive features may not work."
+    }
+}
 # Add the CLI folder to the user's PATH.
 $BinPath = "$InstallRoot\bin"
 $UserPath = [Environment]::GetEnvironmentVariable("Path", "User")

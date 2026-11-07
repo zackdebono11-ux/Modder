@@ -1,17 +1,18 @@
 {
-  "name": "@zackdebono11-ux/modder-installer",
-  "version": "0.1.1",
+  "name": "@zaxlck/modder-installer",
+  "version": "0.1.5",
   "description": "Installer for the Modder Geometry Dash mod platform",
   "main": "modder.js",
   "bin": {
-    "modder-install": "modder.js",
+    "modder-install": "modder-install.cmd",
     "modder": "bin/modder-launcher.cmd"
   },
   "files": [
     "modder.js",
     "bin/",
     "scripts/",
-    "backend/"
+    "backend/",
+    "modder-install.cmd"
   ],
   "scripts": {
     "test": "node --check modder.js && node --check bin/modder.js"
@@ -27,6 +28,9 @@
     "url": "https://github.com/zackdebono11-ux/Modder.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3"
   }
 }

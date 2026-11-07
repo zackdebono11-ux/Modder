@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline/promises");
-const modderFormat = require("./modder-format");
+const { checkFFlate } = require("./modder-dependencies");
 
 const API_URL = "http://localhost:3000";
 const VERSION = "0.3.0";
@@ -29,6 +29,7 @@ COMMANDS:
   pack <folder>        Archive a Modder project
   validate <file>      Validate a .modder archive
   install <file>       Add a package to your local library
+  doctor              Check Modder dependency health
   --help, -h          Show this help menu
   --version, -v       Show the CLI version
     download <id>       Download an authorised mod
@@ -396,9 +397,34 @@ async function main() {
         return;
 
     }
+    if (command === "doctor") {
+        try {
+            const dependency = checkFFlate(path.resolve(__dirname, ".."));
+
+            console.log("\nMODDER DEPENDENCY CHECK");
+            console.log("------------------------------");
+
+            if (dependency.installed) {
+                console.log("fflate: DETECTED");
+                console.log("Version:", dependency.version);
+                console.log("Location:", dependency.resolved);
+            } else {
+                console.error("fflate: MISSING");
+                console.error("Run modder-install to repair the installation.");
+                process.exitCode = 1;
+            }
+        } catch (error) {
+            console.error("Dependency check failed:", error.message);
+            process.exitCode = 1;
+        }
+
+        return;
+    }
+
     const formatCommands = ["create", "open", "build", "pack", "validate", "install"];
 
     if (formatCommands.includes(command)) {
+        const modderFormat = require("./modder-format");
         try {
             switch (command) {
                 case "create":

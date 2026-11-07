@@ -22,8 +22,20 @@ async function serverReady() {
 }
 
 async function main() {
-    if (!fs.existsSync(server) || !fs.existsSync(cli)) {
-        throw new Error("Modder is not fully installed. Run modder-install.");
+    if (!fs.existsSync(cli)) {
+        throw new Error("Modder CLI is missing. Run modder-install.");
+    }
+
+    const command = process.argv[2];
+
+    // These commands do not require the backend.
+    if (["doctor", "--help", "-h", "--version", "-v"].includes(command)) {
+        require(cli);
+        return;
+    }
+
+    if (!fs.existsSync(server)) {
+        throw new Error("Modder backend is missing. Run modder-install.");
     }
 
     if (!await serverReady()) {
